@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">GameFort</string>
+
+    <string name="operation_failed">Operation Failed</string>
+
+    <string name="games_list_not_available">Games list not available at the moment. Please try again later.</string>
+</resources>
