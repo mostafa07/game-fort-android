@@ -21,8 +21,10 @@ class GameDetailsFragment : Fragment() {
         ViewModelProvider(this).get(GameDetailsViewModel::class.java)
     }
 
+
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
+        inflater: LayoutInflater,
+        container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
         binding = DataBindingUtil.inflate(
@@ -42,8 +44,6 @@ class GameDetailsFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         val gameId = arguments.gameIdArgument
-
-        // TODO fetch game by id
-//        viewModel.setRecipe(recipe)
+        viewModel.fetchGameDetails(gameId)
     }
 }

@@ -6,30 +6,25 @@ import androidx.lifecycle.ViewModel
 import com.gamefort.R
 import com.gamefort.data.model.app.CustomMessage
 import com.gamefort.data.model.domain.GameDetails
-import com.gamefort.data.model.domain.GameListItem
-import com.gamefort.data.model.source.remote.gamelist.GameListApiResponseResult
-import com.gamefort.data.repository.GameRepository
+import com.gamefort.data.model.source.remote.gamedetails.GameDetailsApiResponseResult
+import com.gamefort.data.repository.GameDetailsRepository
 import com.gamefort.exception.BusinessException
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.launch
 
-class GameDetailsViewModel: ViewModel() {
+class GameDetailsViewModel : ViewModel() {
 
-    private val gameRepository: GameRepository = GameRepository()
+    private val gameDetailsRepository: GameDetailsRepository = GameDetailsRepository()
 
     private val viewModelJob = SupervisorJob()
     private val viewModelScope = CoroutineScope(viewModelJob + Dispatchers.Main)
 
-    private var _games: MutableLiveData<List<GameListItem>> = MutableLiveData(null)
-    val games: LiveData<List<GameListItem>>
-        get() = _games
 
-    // FIXME
-    private val _selectedGameDetails: MutableLiveData<GameDetails?> = MutableLiveData(null)
-    val selectedGameDetails: LiveData<GameDetails?>
-        get() = _selectedGameDetails
+    private val _gameDetails: MutableLiveData<GameDetails?> = MutableLiveData(null)
+    val gameDetails: LiveData<GameDetails?>
+        get() = _gameDetails
 
 
     private val _successMessage: MutableLiveData<CustomMessage> = MutableLiveData()
@@ -51,42 +46,18 @@ class GameDetailsViewModel: ViewModel() {
     }
 
 
-    // FIXME
-    fun fetchGames() {
+    fun fetchGameDetails(gameId: Int) {
         viewModelScope.launch {
             showLoading()
-//            try {
-            val response = gameRepository.getGamesStream().collect {
+            gameDetailsRepository.getGameDetailsStream(gameId).collect {
                 when (it) {
-                    is GameListApiResponseResult.Success -> {
-                        _games.postValue(it.data)
-//                            _successMessage.postValue()
-//                            setSuccessMessage(R.string.)
+                    is GameDetailsApiResponseResult.Success -> {
+                        _gameDetails.postValue(it.data)
                     }
-                    is GameListApiResponseResult.Error -> {
-//                            _errorMessage.postValue(CustomMessage(R.string.operation_failed))
+                    is GameDetailsApiResponseResult.Error -> {
                         setErrorMessage(it.exception)
                     }
                 }
-            }
-//            } catch (exception: Exception) {
-//                _selectedGameDetails.value = null
-//                setErrorMessage(exception)
-//            }
-            hideLoading()
-        }
-    }
-
-    // FIXME
-    fun getGameDetails(id: Int) {
-        viewModelScope.launch {
-            showLoading()
-            try {
-//                val response = gameRepository.getGameDetails(id)
-//                _selectedGameDetails.postValue(response)
-            } catch (exception: Exception) {
-                _selectedGameDetails.value = null
-                setErrorMessage(exception)
             }
             hideLoading()
         }

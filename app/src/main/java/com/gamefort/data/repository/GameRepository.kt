@@ -11,7 +11,7 @@ import java.io.IOException
 
 private const val RAWG_STARTING_PAGE_INDEX = 1
 
-class GameRepository() {
+class GameRepository {
 
     private val gameWebService: GameWebService =
         RetrofitServiceBuilder.buildService(GameWebService::class.java)
@@ -29,14 +29,14 @@ class GameRepository() {
 
     suspend fun getGamesStream(): Flow<GameListApiResponseResult> {
         lastRequestedPage = 1
-        requestAndSaveData()
+        requestData()
         return gameResults
     }
 
     suspend fun requestMore() {
         if (isRequestInProgress) return
 
-        val successful = requestAndSaveData()
+        val successful = requestData()
         if (successful) {
             lastRequestedPage++
         }
@@ -45,10 +45,10 @@ class GameRepository() {
     suspend fun retry() {
         if (isRequestInProgress) return
 
-        requestAndSaveData()
+        requestData()
     }
 
-    private suspend fun requestAndSaveData(): Boolean {
+    private suspend fun requestData(): Boolean {
         isRequestInProgress = true
         var successful = false
 

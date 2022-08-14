@@ -25,6 +25,7 @@ class GameListFragment : Fragment() {
 
     private var gameAdapter: GameListItemAdapter? = null
 
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,

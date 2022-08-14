@@ -61,10 +61,10 @@ class GameListViewModel : ViewModel() {
                     }
                     is GameListApiResponseResult.Error -> {
                         setErrorMessage(it.exception)
+                        hideLoading()
                     }
                 }
             }
-            hideLoading()
         }
     }
 
